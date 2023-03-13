@@ -2,14 +2,14 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 import PizzaBlock from './PizzaBlock';
 import { Skeleton } from './PizzaBlock/Skeleton';
-import { SearchContext } from '../App';
 import { useEffect, useState } from 'react';
+import axios from 'axios';
 
 const PizzaBlockItems = ({ categoryId, currentPage }) => {
   const sortType = useSelector((state) => state.filter.sort.sortProperty);
+  const searchValue = useSelector((state) => state.filter.searchValue);
   const [items, setItems] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const { searchValue } = React.useContext(SearchContext);
 
   useEffect(() => {
     setIsLoading(true);
@@ -19,14 +19,12 @@ const PizzaBlockItems = ({ categoryId, currentPage }) => {
     const sort = sortType.replace('-', '');
     const order = sortType.includes('-') ? 'asc' : 'desc';
 
-    fetch(
-      `https://640af7ab65d3a01f980c2807.mockapi.io/items?page=${currentPage}&limit=4&${category}&sortBy=${sort}&order=${order}${search}`,
-    )
+    axios
+      .get(
+        `https://640af7ab65d3a01f980c2807.mockapi.io/items?page=${currentPage}&limit=4&${category}&sortBy=${sort}&order=${order}${search}`,
+      )
       .then((res) => {
-        return res.json();
-      })
-      .then((arr) => {
-        setItems(arr);
+        setItems(res.data);
         setIsLoading(false);
       });
     window.scrollTo(0, 0);

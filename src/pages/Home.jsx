@@ -1,19 +1,21 @@
 import React from 'react';
-import { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import Categories from '../components/Categories';
 import Sort from '../components/Sort';
 import PizzaBlockItems from '../components/PizzaBlockItems';
 import Pagination from '../components/Pagination';
-import { setCategoryId } from '../redux/slices/filterSlice';
+import { setCategoryId, setCurrentPage } from '../redux/slices/filterSlice';
 
 const Home = () => {
-  const categoryId = useSelector((state) => state.filter.categoryId);
+  const { categoryId, currentPage } = useSelector((state) => state.filter);
   const dispatch = useDispatch();
-  const [currentPage, setCurrentPage] = useState(1);
 
   const onChangeCategory = (id) => {
     dispatch(setCategoryId(id));
+  };
+
+  const onChangePage = (number) => {
+    dispatch(setCurrentPage(number));
   };
 
   return (
@@ -24,7 +26,7 @@ const Home = () => {
       </div>
       <h2 className="content__title">Все пиццы</h2>
       <PizzaBlockItems categoryId={categoryId} currentPage={currentPage} />
-      <Pagination onChangePage={(number) => setCurrentPage(number)} />
+      <Pagination currentPage={currentPage} onChangePage={onChangePage} />
     </div>
   );
 };
