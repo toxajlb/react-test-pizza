@@ -5,15 +5,15 @@ import { Skeleton } from './PizzaBlock/Skeleton';
 import { useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import qs from 'qs';
-import { setFilters } from '../redux/slices/filterSlice';
-import { fetchPizzas } from '../redux/slices/pizzaSlice';
+import { setFilters, selectSortProperty, selectSearch } from '../redux/slices/filterSlice';
+import { fetchPizzas, selectPizzaData } from '../redux/slices/pizzaSlice';
 import { sortList } from './Sort';
 
 const PizzaBlockItems = ({ categoryId, currentPage }) => {
   const dispatch = useDispatch();
-  const { items, status } = useSelector((state) => state.pizza);
-  const sortType = useSelector((state) => state.filter.sort.sortProperty);
-  const searchValue = useSelector((state) => state.filter.searchValue);
+  const { items, status } = useSelector(selectPizzaData);
+  const sortType = useSelector(selectSortProperty);
+  const searchValue = useSelector(selectSearch);
   const navigate = useNavigate();
   const isSearch = useRef(false);
   const isMounted = useRef(false);
