@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import PizzaBlock from './PizzaBlock';
 import { Skeleton } from './PizzaBlock/Skeleton';
 import { useEffect, useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import qs from 'qs';
 import { setFilters, selectSortProperty, selectSearch } from '../redux/slices/filterSlice';
 import { fetchPizzas, selectPizzaData } from '../redux/slices/pizzaSlice';
@@ -94,7 +94,11 @@ const PizzaBlockItems = ({ categoryId, currentPage }) => {
       }
       return false;
     })
-    .map((item) => <PizzaBlock key={item.id} {...item} />);
+    .map((item) => (
+      <Link key={item.id} to={`/pizza/${item.id}`}>
+        <PizzaBlock {...item} />{' '}
+      </Link>
+    ));
 
   return (
     <>
