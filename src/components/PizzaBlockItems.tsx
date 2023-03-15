@@ -9,7 +9,12 @@ import { setFilters, selectSortProperty, selectSearch } from '../redux/slices/fi
 import { fetchPizzas, selectPizzaData } from '../redux/slices/pizzaSlice';
 import { sortList } from './Sort';
 
-const PizzaBlockItems = ({ categoryId, currentPage }) => {
+type PizzaBlockItemsProps = {
+  categoryId: number;
+  currentPage: number;
+};
+
+const PizzaBlockItems: React.FC<PizzaBlockItemsProps> = ({ categoryId, currentPage }) => {
   const dispatch = useDispatch();
   const { items, status } = useSelector(selectPizzaData);
   const sortType = useSelector(selectSortProperty);
@@ -26,6 +31,7 @@ const PizzaBlockItems = ({ categoryId, currentPage }) => {
 
     try {
       dispatch(
+        // @ts-ignore
         fetchPizzas({
           category,
           search,
@@ -88,13 +94,13 @@ const PizzaBlockItems = ({ categoryId, currentPage }) => {
 
   const skeletons = [...new Array(6)].map((_, index) => <Skeleton key={index} />);
   const pizzas = items
-    .filter((obj) => {
+    .filter((obj: any) => {
       if (obj.title.toLowerCase().includes(searchValue.toLowerCase())) {
         return true;
       }
       return false;
     })
-    .map((item) => (
+    .map((item: any) => (
       <Link key={item.id} to={`/pizza/${item.id}`}>
         <PizzaBlock {...item} />{' '}
       </Link>

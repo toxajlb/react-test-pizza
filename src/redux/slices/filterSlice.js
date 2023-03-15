@@ -34,6 +34,7 @@ export const filterSlice = createSlice({
   },
 });
 
+export const selectPizzaData = (state) => state.filter;
 export const selectSort = (state) => state.filter.sort;
 export const selectSortProperty = (state) => state.filter.sort.sortProperty;
 export const selectCartItemById = (id) => (state) => state.cart.items.find((obj) => obj.id === id);
