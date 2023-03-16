@@ -6,9 +6,12 @@ import { Skeleton } from './PizzaBlock/Skeleton';
 import { useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import qs from 'qs';
-import { setFilters, selectSortProperty, selectSearch } from '../redux/slices/filterSlice';
-import { fetchPizzas, Pizza, SearchPizzaParams, selectPizzaData } from '../redux/slices/pizzaSlice';
 import { sortList } from './Sort';
+import { selectSearch, selectSortProperty } from '../redux/filter/selectors';
+import { setFilters } from '../redux/filter/slice';
+import { selectPizzaData } from '../redux/pizza/selectors';
+import { Pizza, SearchPizzaParams } from '../redux/pizza/types';
+import { fetchPizzas } from '../redux/pizza/asycActions';
 
 type PizzaBlockItemsProps = {
   categoryId: number;
@@ -93,6 +96,7 @@ const PizzaBlockItems: React.FC<PizzaBlockItemsProps> = ({ categoryId, currentPa
       );
     }
     isMounted.current = true;
+    // eslint-disable-next-line
   }, []);
 
   const skeletons = [...new Array(6)].map((_, index) => <Skeleton key={index} />);

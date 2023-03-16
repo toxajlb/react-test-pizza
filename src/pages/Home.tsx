@@ -4,10 +4,11 @@ import Categories from '../components/Categories';
 import Sort from '../components/Sort';
 import PizzaBlockItems from '../components/PizzaBlockItems';
 import Pagination from '../components/Pagination';
-import { setCategoryId, setCurrentPage, selectPizzaData } from '../redux/slices/filterSlice';
+import { selectFilter } from '../redux/filter/selectors';
+import { setCategoryId, setCurrentPage } from '../redux/filter/slice';
 
 const Home: React.FC = () => {
-  const { categoryId, currentPage } = useSelector(selectPizzaData);
+  const { categoryId, currentPage } = useSelector(selectFilter);
   const dispatch = useDispatch();
 
   const onChangeCategory = useCallback((index: number) => {
