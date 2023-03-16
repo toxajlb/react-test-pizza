@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import Categories from '../components/Categories';
 import Sort from '../components/Sort';
@@ -10,9 +10,10 @@ const Home: React.FC = () => {
   const { categoryId, currentPage } = useSelector(selectPizzaData);
   const dispatch = useDispatch();
 
-  const onChangeCategory = (index: number) => {
+  const onChangeCategory = useCallback((index: number) => {
     dispatch(setCategoryId(index));
-  };
+    // eslint-disable-next-line
+  }, []);
 
   const onChangePage = (num: number) => {
     dispatch(setCurrentPage(num));
