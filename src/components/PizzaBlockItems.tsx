@@ -1,12 +1,13 @@
 import React from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
+import { useAppDispatch } from '../redux/store';
 import PizzaBlock from './PizzaBlock';
 import { Skeleton } from './PizzaBlock/Skeleton';
 import { useEffect, useRef } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import qs from 'qs';
 import { setFilters, selectSortProperty, selectSearch } from '../redux/slices/filterSlice';
-import { fetchPizzas, selectPizzaData } from '../redux/slices/pizzaSlice';
+import { fetchPizzas, Pizza, SearchPizzaParams, selectPizzaData } from '../redux/slices/pizzaSlice';
 import { sortList } from './Sort';
 
 type PizzaBlockItemsProps = {
@@ -15,7 +16,7 @@ type PizzaBlockItemsProps = {
 };
 
 const PizzaBlockItems: React.FC<PizzaBlockItemsProps> = ({ categoryId, currentPage }) => {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const { items, status } = useSelector(selectPizzaData);
   const sortType = useSelector(selectSortProperty);
   const searchValue = useSelector(selectSearch);
@@ -31,13 +32,12 @@ const PizzaBlockItems: React.FC<PizzaBlockItemsProps> = ({ categoryId, currentPa
 
     try {
       dispatch(
-        // @ts-ignore
         fetchPizzas({
           category,
           search,
           sort,
           order,
-          currentPage,
+          currentPage: String(currentPage),
         }),
       );
     } catch (error) {
@@ -59,27 +59,14 @@ const PizzaBlockItems: React.FC<PizzaBlockItemsProps> = ({ categoryId, currentPa
         { addQueryPrefix: true },
       );
       navigate(queryString);
+
+      if (!window.location.search) {
+        dispatch(fetchPizzas({} as SearchPizzaParams));
+      }
     }
     isMounted.current = true;
     // eslint-disable-next-line
   }, [categoryId, sortType, searchValue, currentPage]);
-
-  useEffect(() => {
-    if (window.location.search) {
-      const params = qs.parse(window.location.search.substring(1));
-
-      const sort = sortList.find((obj) => obj.sortProperty === params.sortProperty);
-
-      dispatch(
-        setFilters({
-          ...params,
-          sort,
-        }),
-      );
-      isSearch.current = true;
-    }
-    // eslint-disable-next-line
-  }, []);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -92,26 +79,38 @@ const PizzaBlockItems: React.FC<PizzaBlockItemsProps> = ({ categoryId, currentPa
     // eslint-disable-next-line
   }, [categoryId, sortType, searchValue, currentPage]);
 
+  React.useEffect(() => {
+    if (window.location.search) {
+      const params = qs.parse(window.location.search.substring(1)) as unknown as SearchPizzaParams;
+      const sortBy = sortList.find((obj) => obj.sortProperty === params.sort);
+      dispatch(
+        setFilters({
+          searchValue: params.search,
+          categoryId: Number(params.category),
+          currentPage: Number(params.currentPage),
+          sort: sortBy || sortList[0],
+        }),
+      );
+    }
+    isMounted.current = true;
+  }, []);
+
   const skeletons = [...new Array(6)].map((_, index) => <Skeleton key={index} />);
   const pizzas = items
-    .filter((obj: any) => {
+    .filter((obj: Pizza) => {
       if (obj.title.toLowerCase().includes(searchValue.toLowerCase())) {
         return true;
       }
       return false;
     })
-    .map((item: any) => (
-      <Link key={item.id} to={`/pizza/${item.id}`}>
-        <PizzaBlock {...item} />{' '}
-      </Link>
-    ));
+    .map((obj: Pizza) => <PizzaBlock key={obj.id} {...obj} />);
 
   return (
     <>
       {status === 'error' ? (
         <div className="content__error-info">
           <h2>Произошла ошибка 😕</h2>
-          <p>К сожалению, не удалось получить питсы. Попробуйте повторить попытку позже.</p>
+          <p>Попробуйте повторить попытку позже.</p>
         </div>
       ) : (
         <div className="content__items">{status === 'loading' ? skeletons : pizzas}</div>
