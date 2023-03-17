@@ -1,9 +1,6 @@
 import React, { useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import Categories from '../components/Categories';
-import Sort from '../components/Sort';
-import PizzaBlockItems from '../components/PizzaBlockItems';
-import Pagination from '../components/Pagination';
+import { Categories, Sort, Pagination, PizzaBlockItems } from '../components';
 import { selectFilter } from '../redux/filter/selectors';
 import { setCategoryId, setCurrentPage } from '../redux/filter/slice';
 

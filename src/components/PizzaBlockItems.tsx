@@ -1,9 +1,8 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import { useSelector } from 'react-redux';
 import { useAppDispatch } from '../redux/store';
 import PizzaBlock from './PizzaBlock';
 import { Skeleton } from './PizzaBlock/Skeleton';
-import { useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import qs from 'qs';
 import { sortList } from './Sort';
