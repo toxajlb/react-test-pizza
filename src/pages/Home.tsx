@@ -1,12 +1,13 @@
 import React, { useCallback } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
+import { useAppDispatch } from '../redux/store';
 import { Categories, Sort, Pagination, PizzaBlockItems } from '../components';
 import { selectFilter } from '../redux/filter/selectors';
 import { setCategoryId, setCurrentPage } from '../redux/filter/slice';
 
 const Home: React.FC = () => {
   const { categoryId, currentPage } = useSelector(selectFilter);
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   const onChangeCategory = useCallback((index: number) => {
     dispatch(setCategoryId(index));

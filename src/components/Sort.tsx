@@ -1,6 +1,7 @@
 import React from 'react';
 import { useState, useEffect, useRef } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
+import { useAppDispatch } from '../redux/store';
 import { selectSort } from '../redux/filter/selectors';
 import { setSort } from '../redux/filter/slice';
 import { SortPropertyEnum } from '../redux/filter/types';
@@ -20,7 +21,7 @@ export const sortList: SortItem[] = [
 ];
 
 const SortPopup: React.FC = React.memo(() => {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const sort = useSelector(selectSort);
   const [isVisible, setIsVisible] = useState(false);
   const sortRef = useRef<HTMLDivElement>(null);

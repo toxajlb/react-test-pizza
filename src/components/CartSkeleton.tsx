@@ -4,9 +4,9 @@ import ContentLoader from 'react-content-loader';
 const CartSkeleton: React.FC = () => {
   return (
     <ContentLoader
+      className="content container container--cart cart content__items cart__item"
       height={1200}
       width={1060}
-      className="pizza-block"
       backgroundColor="#f3f3f3"
       foregroundColor="#ecebeb">
       <rect x="103" y="12" rx="3" ry="3" width="123" height="7" />

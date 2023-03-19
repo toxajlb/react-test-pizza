@@ -23,22 +23,22 @@ const PizzaBlockItems: React.FC<PizzaBlockItemsProps> = ({ categoryId, currentPa
   const sortType = useSelector(selectSortProperty);
   const searchValue = useSelector(selectSearch);
   const navigate = useNavigate();
-  const isSearch = useRef(false);
   const isMounted = useRef(false);
+  const isSearch = useRef(false);
 
   const getPizzas = async () => {
+    const sort = sortType.replace('-', '');
     const category = categoryId > 0 ? `category=${categoryId}` : '';
     const search = searchValue ? `&search=${searchValue}` : '';
-    const sort = sortType.replace('-', '');
     const order = sortType.includes('-') ? 'asc' : 'desc';
 
     try {
       dispatch(
         fetchPizzas({
-          category,
-          search,
           sort,
           order,
+          category,
+          search,
           currentPage: String(currentPage),
         }),
       );
@@ -55,7 +55,7 @@ const PizzaBlockItems: React.FC<PizzaBlockItemsProps> = ({ categoryId, currentPa
       const queryString = qs.stringify(
         {
           sortProperty: sortType,
-          categoryId,
+          categoryId: categoryId > 0 ? categoryId : null,
           currentPage,
         },
         { addQueryPrefix: true },
